@@ -58,9 +58,9 @@ h1,h2,h3{margin:0}
 /* Kategorije */
 .cats{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
 .cats .wrap{position:relative}
-.cats ul{display:flex;gap:2px;list-style:none;margin:0 -20px;padding:0 20px;overflow-x:auto;scrollbar-width:none}
+.cats ul{display:flex;gap:2px;list-style:none;margin:0 -20px;padding:0 20px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:none}
 .cats ul::-webkit-scrollbar{display:none}
-.cats a{display:flex;align-items:center;min-height:48px;padding:0 12px;color:var(--muted);font-weight:500;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;
+.cats a{display:flex;align-items:center;min-height:48px;padding:0 12px;color:var(--muted);font-weight:500;text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;
   -webkit-tap-highlight-color:transparent;transition:color 150ms ease,border-color 150ms ease}
 .cats a:active{color:var(--ink)}
 .cats a[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent)}
