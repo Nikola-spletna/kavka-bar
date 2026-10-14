@@ -143,6 +143,11 @@ h1,h2,h3{margin:0}
 .ev h3{font-size:18px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
 .ev-meta{margin:2px 0 0;color:var(--ev-muted);font-size:15px}
 .ev-desc{margin:6px 0 0;max-width:48ch}
+.ev-poster{display:block;margin:16px 0 4px;max-width:260px;border-radius:4px;overflow:hidden;background:#fff;
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--on-accent) 30%,transparent);-webkit-tap-highlight-color:transparent}
+.ev-poster img{display:block;width:100%;height:auto;aspect-ratio:1240/1748}
+.ev .ev-poster{max-width:160px}
+@media (prefers-reduced-motion:no-preference){.ev-poster{transition:transform 160ms var(--ease-out)}.ev-poster:active{transform:scale(.98)}}
 .ev-more{display:inline-flex;align-items:center;min-height:44px;margin:4px 0 0;padding:0;background:none;border:0;color:var(--on-accent);font:inherit;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;
   -webkit-tap-highlight-color:transparent;transition:opacity 120ms ease}
 .ev-more:active{opacity:.6}
@@ -464,11 +469,13 @@ noscript p{color:var(--muted);padding:24px 0}
 /* Meni in delovni čas sta zapisana v HTML zgoraj, da se prikažeta tudi brez JavaScripta. */
 
 /* DOGODKI: vpiši prihajajoče koncerte in dogodke. Pretekli se skrijejo sami.
-   date = "LLLL-MM-DD", time, title = ime, type (npr. "Koncert"), entry (npr. "Vstop prost"), d = kratek opis.
+   date = "LLLL-MM-DD", time, title = ime, type (npr. "Koncert"), entry (npr. "Vstop prost"), d = kratek opis,
+   img = plakat (neobvezno, slika v mapi dogodki/).
    Primer:
    {date:"2026-10-17", time:"21:00", title:"Ime izvajalca", type:"Koncert", entry:"Vstop prost", d:"Kratek opis."},
 */
 var EVENTS = [
+  {date:"2026-11-13", time:"18:00", title:"Albert Lucien Behar", type:"Razstava", d:"Večer z DJ-em.", img:"dogodki/2026-11-13-behar.jpg"},
 ];
 /* ============================ konec vsebine ============================ */
 
@@ -676,6 +683,12 @@ var WD = ["ned","pon","tor","sre","čet","pet","sob"];
 var MO = ["jan","feb","mar","apr","maj","jun","jul","avg","sep","okt","nov","dec"];
 var MO_GEN = ["januarja","februarja","marca","aprila","maja","junija","julija","avgusta","septembra","oktobra","novembra","decembra"];
 function evDate(e){ var p = e.date.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+function poster(e){
+  var a = el("a", "ev-poster"); a.href = e.img; a.target = "_blank"; a.rel = "noopener";
+  var im = el("img"); im.src = e.img; im.alt = "Plakat: " + e.title; im.loading = "lazy"; im.decoding = "async";
+  a.appendChild(im);
+  return a;
+}
 function paintEvents(){
   var box = document.getElementById("events");
   var today = new Date(); today.setHours(0,0,0,0);
@@ -695,6 +708,7 @@ function paintEvents(){
   var fmeta = [f.type, f.entry].filter(Boolean).join(", ");
   if (fmeta) art.appendChild(el("p", "ev-meta", fmeta));
   if (f.d) art.appendChild(el("p", "ev-desc", f.d));
+  if (f.img) art.appendChild(poster(f));
   box.appendChild(art);
 
   // Ostali prihajajoči dogodki
@@ -716,6 +730,7 @@ function paintEvents(){
     var meta = [e.type, e.time ? "ob " + e.time : "", e.entry].filter(Boolean).join(", ");
     if (meta) body.appendChild(el("p", "ev-meta", meta));
     if (e.d) body.appendChild(el("p", "ev-desc", e.d));
+    if (e.img) body.appendChild(poster(e));
     li.appendChild(dt); li.appendChild(body); ul.appendChild(li);
   });
   box.appendChild(ul);
